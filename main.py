@@ -66,15 +66,10 @@ def main():
         private_key, address = create_private_key()
         zero_address_list = [address_zero] * len(address)
 
-        for contract in contract_list:
 
-            with cf.ThreadPoolExecutor(max_workers=10) as executor:
+        with cf.ThreadPoolExecutor(max_workers=10) as executor:
+            for contract in contract_list:
                 executor.submit(scanner, contract, address, zero_address_list, private_key)
-
-
-
-
-            
 
 
 if __name__ == '__main__':
