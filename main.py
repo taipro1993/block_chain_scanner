@@ -39,7 +39,7 @@ def save_data(data_input):
 def create_private_key():
     private_key = []
     address_list = []
-    for i in range(2000):
+    for i in range(100):
         # random_bytes = os.urandom(32)
         random_bytes = bytearray(random.getrandbits(8) for _ in range(32))
         # privateKey = Web3.keccak(text=f'{random_bytes}').hex()
@@ -47,16 +47,19 @@ def create_private_key():
         private_key.append(privateKey)
         address = network_binace.eth.account.from_key(privateKey).address
         address_list.append(address)
+        print(f'{address} - {privateKey}')
     return private_key, address_list
 
 def scanner(contract, address_list,zero_address_list,private_key):
     print(len(address_list))
+    try:
+        balances = contract.functions.balances(address_list,zero_address_list).call()
 
-    balances = contract.functions.balances(address_list,zero_address_list).call()
-
-    for i in range(len(balances)):
-        if balances[i] != 0:
-            save_data(f'{address_list[i]} - {private_key[i]} - {balances[i]}')
+        for i in range(len(balances)):
+            if balances[i] != 0:
+                save_data(f'{address_list[i]} - {private_key[i]} - {balances[i]}')
+    except :
+        pass
 
 def main():
 
